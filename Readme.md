@@ -1,7 +1,5 @@
 Introducción a R
 ================
-Julián Equihua, Teresa Ortiz, Fernando Pardo
-8/15/2017
 
 Curso introductorio de R: básicos de análisis y visualización de datos
 ----------------------------------------------------------------------
@@ -92,3 +90,16 @@ R Markdown
 -   Habrá ejercicios de tarea
 -   La clase tendrá múltiples ejemplos prácticos algunos de los cuales deberán ser seguidos por los asistentes.
 -   Cada sesión será de 2 horas con descanso de 10 minutos.
+
+#### Profesores por sesión
+
+| Tema                    | Fecha            | Prof     | Ayudante |
+|-------------------------|------------------|----------|----------|
+| Introducción            | 17 de agosto     | Teresa   | Julián   |
+| Flujo de trabajo        | 24 de agosto     | Julián   | Fernando |
+| Transformación de datos | 31 de agosto     | Fernando | Julián   |
+| Manejo de datos         | 7 de septiembre  | Fernando | Teresa   |
+| Programación            | 21 de septiembre | Julián   | Fernando |
+| Estadística-encuestas   | 28 de septiembre | Teresa   | Julián   |
+| Visualización           | 5 de octubre     | Teresa   | Fernando |
+| GIS                     | 12 de octubre    | Julián   | Fernando |

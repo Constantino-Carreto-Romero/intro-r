@@ -1,6 +1,6 @@
 ---
-title: "README"
-author: "Teresa Ortiz"
+title: "Introducción a R"
+author: "Julián Equihua, Teresa Ortiz, Fernando Pardo"
 date: "8/15/2017"
 output: github_document
 ---
@@ -90,3 +90,5 @@ https://cran.r-project.org/web/views/SocialSciences.html
 * Habrá ejercicios de tarea  
 * La clase tendrá múltiples ejemplos prácticos algunos de los cuales deberán ser seguidos por los asistentes.  
 * Cada sesión será de 2 horas con descanso de 10 minutos.  
+
+

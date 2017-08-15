@@ -1,6 +1,6 @@
-README
+Introducción a R
 ================
-Teresa Ortiz
+Julián Equihua, Teresa Ortiz, Fernando Pardo
 8/15/2017
 
 Curso introductorio de R: básicos de análisis y visualización de datos
@@ -66,10 +66,10 @@ Introducción a programación
 
 #### Sesión 6 – 28 de septiembre
 
-Modelos
+R Markdown
 
--   Construcción de modelos
--   Visualización de modelos
+-   Programación literaria y reproducibilidad
+-   Crear reportes html, pdf o word.
 
 #### Sesión 7 – 5 de octubre
 

@@ -1,0 +1,33 @@
+ENCUESTA
+
+Experiencia en R
+0-5 horas
+5-20 horas
+20-100 horas
+Más de 100 horas
+
+2.   Usualmente mis datos están almacenados en
+Excel o csv
+Archivos sav (SPSS)
+Archivos dta (Stata)
+Base de datos (PostgreSQL, MongoDB, etc)
+
+3.   Software estadístico qué usa más
+Excel
+SPSS
+SAS
+Stata
+Otro (especificar)________
+
+4. Cuando analizas datos ¿qué tipo de operaciones/procesos llevas a cabo con más frecuencia? 
+Filtrar registros
+Calcular nuevas variables
+Cruzar tablas
+Calcular resúmenes de agregados
+Otro (especificar)_________
+
+5. ¿Qué tipo de análisis te interesan más?
+Exploración de datos (histogramas, diagramas de caja y brazo, resúmenes)
+Ajuste de modelos para inferencia estadística
+Ajuste de modelos para predicción
+Simulación

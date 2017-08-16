@@ -5,7 +5,7 @@ output: github_document
 
 ## Curso introductorio de R: básicos de análisis y visualización de datos
  
-Curso diseñado para impartirse en 8 sesiones de 2 horas cada una, los jueves de 8 a 10
+Curso diseñado para impartirse en 8 sesiones de 2 horas cada una, los jueves de 8 a 10.  
 Total de horas: 16
  
 #### Objetivos

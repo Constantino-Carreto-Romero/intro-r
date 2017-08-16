@@ -4,7 +4,8 @@ Introducción a R
 Curso introductorio de R: básicos de análisis y visualización de datos
 ----------------------------------------------------------------------
 
-Curso diseñado para impartirse en 8 sesiones de 2 horas cada una, los jueves de 8 a 10 Total de horas: 16
+Curso diseñado para impartirse en 8 sesiones de 2 horas cada una, los jueves de 8 a 10.
+Total de horas: 16
 
 #### Objetivos
 
@@ -22,14 +23,11 @@ Introducción
 Visualización en R
 
 -   El paquete ggplot2
-
-#### Sesión 2 – 24 de agosto
-
-Visualización en R
-
 -   Gráficas básicas y mapeo de datos a objetos visuales
 -   Páneles y transformaciones
 -   Otras técnicas útiles
+
+#### Sesión 2 – 24 de agosto
 
 Flujo de trabajo en R
 
@@ -40,6 +38,7 @@ Flujo de trabajo en R
 
 Transformación de datos
 
+-   Lectura de datos en R. Tablas
 -   Transformaciones: filtros, ordenamiento, columnas, creación de variables
 -   Datos faltantes
 -   Resúmenes y agregación
@@ -48,7 +47,6 @@ Transformación de datos
 
 Manejo de datos
 
--   Lectura de datos en R. Tablas
 -   Organización de datos y transposiciones,
 -   Trabajando con más de una tabla: joins.
 -   Algunos tipos de datos en R: cadenas, factores, fechas

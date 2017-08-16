@@ -24,14 +24,11 @@ Introducción
 Visualización en R
 
  * El paquete ggplot2
- 
+ * Gráficas básicas y mapeo de datos a objetos visuales
+ * Páneles y transformaciones
+ * Otras técnicas útiles
+
 #### Sesión 2 – 24 de agosto
-Visualización en R
-
-* Gráficas básicas y mapeo de datos a objetos visuales
-* Páneles y transformaciones
-* Otras técnicas útiles
-
 Flujo de trabajo en R
  
 * Escribiendo código en R  
@@ -41,6 +38,7 @@ Flujo de trabajo en R
  
 Transformación de datos
 
+* Lectura de datos en R. Tablas  
 * Transformaciones: filtros, ordenamiento, columnas, creación de variables  
 * Datos faltantes  
 * Resúmenes y agregación  
@@ -49,7 +47,6 @@ Transformación de datos
  
 Manejo de datos
 
-* Lectura de datos en R. Tablas  
 * Organización de datos y transposiciones,  
 * Trabajando con más de una tabla: joins.  
 * Algunos tipos de datos en R: cadenas, factores, fechas  

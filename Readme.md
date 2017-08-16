@@ -31,6 +31,7 @@ Visualización en R
 
 Flujo de trabajo en R
 
+-   Lectura de datos en R. Tablas
 -   Escribiendo código en R
 -   Scripts
 
@@ -38,7 +39,6 @@ Flujo de trabajo en R
 
 Transformación de datos
 
--   Lectura de datos en R. Tablas
 -   Transformaciones: filtros, ordenamiento, columnas, creación de variables
 -   Datos faltantes
 -   Resúmenes y agregación

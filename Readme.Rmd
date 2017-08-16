@@ -69,8 +69,7 @@ R Markdown
 
 #### Sesión 7 – 5 de octubre
 * Estadística para las ciencias sociales
-https://cran.r-project.org/web/views/SocialSciences.html  
-
+https://cran.r-project.org/web/views/SocialSciences.html  s
 * Analizar encuestas: http://www.asdfree.com/ 
  
 #### Sesión 8 – 12 de octubre

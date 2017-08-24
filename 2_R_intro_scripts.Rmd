@@ -178,7 +178,7 @@ knitr::include_graphics("E:/repositories/intro-r/imagenes/2_scripts/6_iris.png")
 
 Estos datos están por default en R.  
 
-```{r,echo=FALSE}
+```{r}
 library(tidyverse)
 glimpse(iris)
 ```

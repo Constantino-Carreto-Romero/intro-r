@@ -1,0 +1,186 @@
+---
+title: "Scripts y una introducción a lectura de datos en R"
+author: "Julián Equihua"
+output:
+  html_document: default
+  html_notebook:
+    theme: spacelab
+---
+
+¿Qué aprendimos la clase pasada?
+
+
+<ul>
+<li>R es un lenguaje de programación popular con muchísimas y siempre nuevas aplicaciones</li>
+<li>Una de sus fortalezas es su potencial para la visualización de datos</li>
+<li>R es frustrante al principio, su sintaxsis puede resultar poco intuitiva y como todos los lenguajes de programación es sumamente sensible a errores de dedo</li>
+</ul>
+
+<!--
+```{r, echo=FALSE}
+htmltools::img(src = knitr::image_uri(file.path(R.home("doc"), "html", "logo.jpg")), 
+  alt = 'logo', 
+               style = 'position:absolute; top:0; left:0; padding:30px;')
+```
+-->
+
+## Básicos de programación en R
+##### Las secciones principales de nuestro ambiente de desarrollo en RStudio
+
+En el menú superior en la sección **File**, la primera opción permite crear un nuevo archivo. Ahí existe la opción de generar un Script. 
+
+Como se mencionó la clase pasada, Rstudio es un ambiente de desarrollo integrado para R: incluye una consola, un editor de texto y un conjunto de herramientas para administrar el espacio de trabajo cuando se utiliza R. Se debe notar que R es un lenguaje que funciona cargando los objetos que va a utilizar en la memoria RAM de la computadora. Cuando decimos "espacio de trabajo" nos referimos a la memoria RAM que en un momento dado está destinada para trabajo en R.
+
+
+```{r, out.width = "700px",echo=FALSE}
+knitr::include_graphics("E:/repositories/intro-r/imagenes/2_scripts/1_rstudio.png")
+```
+
+##### R como una calculadora
+
+En la clase pasada omitimos algunos elementos básicos de R para lograr que pudiésemos comenzar a graficar lo más pronto posible.
+
+Uno de esos elementos es que R puede llevar a cabo operaciones como una calculadora. La consola de R entiende expresiones matemáticos y los puede operar para obtener sus resultados.
+
+```{r}
+2+2
+
+2000*99^2-444
+```
+
+Estas operaciones no se guardan en el espacio de trabajo. Igual que cuando se usa una calculadora sin guardar un resultado en su memoria, al momento de producir el resultado se pierde la operación. 
+
+##### Asignación de objetos en R
+
+Para almacenar un resultado en el espacio de trabajo de R es necesario asignarlo a un objeto. Las asignaciones en R tienen siempre la misma forma:
+
+<center>**nombre_del_objeto <- valor**</center>
+
+
+Por ejemplo puedes asignar una de las operaciones anteriores a un objeto en R.
+
+```{r}
+operacion_1 <- 2+2
+
+```
+
+Escribir el nombre del objeto en la consola es equivalente a pregunarle a R ¿Qué hay en ese objeto?
+
+```{r}
+operacion_1
+
+```
+
+Es buena práctica ponerle nombres informativos a los objetos que estamos generando. Recomendamos usar la nomenclatura llamada **snake_case** que se refiere a separar las palabras del nombre de tu objeto con un "_".
+
+Construyamos otro objeto que guarda el resultado de una operación.
+
+```{r}
+esta_operacion_es_sumamente_larga <- 2+2^21*2183176321/(22+2.56^121)+11111
+
+```
+
+RStudio tiene una herramienta de autocompletado de nombres, si escribes en la consola únicamente "esta" y aprietas la tecla Tab debe completar el nombre del objeto anterior.
+
+##### Funciones en R
+
+Los comandos que se utilizaron la clase pasada para graficar se llaman funciones. Las funciones en R tienen la forma:
+
+<center>**nombre_de_la_función(argumento1=valor1,argumento2=valor2,...)**</center>
+
+El nombre de la función indica a R qué función se debe ejecutar. Cada función tiene asociada una lista de argumentos que le permiten saber a R qué le estás pidiendo que haga.
+
+Como un primer ejemplo, vimos la clase pasada que la instalación de paquetes en R se puede llevar a cabo usando una función: install.packages(). Lo mínimo que necesita R para poder instalar un paquete es cuál debe instalar. Por esto el uso de esta función es simplemente install.packages(pkgs="nombre_del_paquete").
+
+También debemos recordar que el símbolo "?" junto a una función nos permite acceder a la ayuda de R sobre la misma. 
+
+Estudiemos ahora la función seq(), pueden escribir ?seq para ver la ayuda sobre esta función. Esta genera secuencias de números, por ejemplo para generar la secuencia de números enteros del 1 al 100 basta con escribir:
+
+```{r}
+seq(from=1,to=100)
+
+```
+
+Una observación útil es que el autocompletado de RStudio ¡sirve también para funciones! Intenta escribir "se" en la consola y luego oprimir la tecla Tab. Deberá aparecer un recuadro con un listado de opciones. 
+
+```{r, out.width = "400px",echo=FALSE}
+knitr::include_graphics("E:/repositories/intro-r/imagenes/2_scripts/2_function_tab.png")
+```
+
+Escribir una letra más (e.g. "q") reduce la lista de opciones y la función seq deberá ya ser visible en ellas. Luego basta con oprimir la tecla Enter para elegir la función seq.
+
+El resultado de utilizar una función se puede también asignar a un objeto. Esto será de gran utilidad a la hora de trabajar en R.
+
+```{r}
+secuencia_del_1_al_100 <- seq(from=1,to=100)
+
+```
+
+En la sección superior derecha de nuestro ambiente de RStudio ya deben existir dos objetos cargados en el espacio de trabajo: "esta_operacion_es_sumamente_larga" y "secuencia_del_1_al_100". Estos ya están cargados en la memoria RAM de la computadora y R puede acceder a ellos cuando se les solicite utilizando su nombre.
+
+```{r, out.width = "700px",echo=FALSE}
+knitr::include_graphics("E:/repositories/intro-r/imagenes/2_scripts/3_espacio_trabajo.png")
+```
+
+![](E:/repositories/intro-r/imagenes/manicule2.jpg) ¿Por qué no funciona el siguiente código? Modifícalo hasta que cada instrucción funcione.
+
+library(tidyverse)
+
+ggplot(dota = mpg) + geom_point(mapping = aes(x = displ, y = hwy))
+
+fliter(mpg, cyl = 8)
+
+filter(diamond, carat > 3)
+
+## Scripts en R
+
+##### ¿Qué es un script?
+
+En la sección anterior creamos nuestro primer script. Elegimos un nombre para él pero por el momento se encuentra vacío. Un script es llanamente un archivo de texto y en él se pueden escribir instrucciones de R. En realidad podrías escribir tu código de R en cualquier procesador de texto, por ejemplo en word que es como muchos entregaron sus tareas. La conveniencia de tener un procesador de texto dentro de tu ambiente de trabajo (RStudio) es que te permite mandar las instrucciones diréctamente a la consola para su ejecución. 
+
+Hasta ahora hemos trabajado todo diréctamente en la consola pero generar un script nos evita la necesidad de volver a escribir un bloque de código si cometimos algún error. Nos permite ir modificando el código al vuelo y re-ejecutándolo de manera iterativa. 
+
+En un script el símbolo # le indica a R que esa línea es un comentario. Los comentarios no se ejecutan y sirven para tener notas para nosotros mismos sobre el código que estamos desarrollando. Cuando una línea de texto es un comentario, será de color verde.
+
+```{r, out.width = "700px",echo=FALSE}
+knitr::include_graphics("E:/repositories/intro-r/imagenes/2_scripts/4_primer_script.png")
+```
+
+Para ejecutar el código que se encuentra en un script se pueden utilizar las teclas: Ctrl/Cmd (mac) + Enter o el botrón "Run" que se encuentra en la esquina superior derecha de la ventana de scripts. En un script puedes correr una línea en particular (primero la eliges con el mouse, botón izquierdo). También puedes correr una selección de tu script, para esto sólo debes elegir una sección de tu código dejando apretado el botón derecho del mouse o con la tecla shift y las flechas del teclado; análogo a como se hace en word.
+
+![](E:/repositories/intro-r/imagenes/manicule2.jpg) Hacer un script que te permita agregar colores por "manufacturer" a la siguiente gráfica.
+
+library(tidyverse)
+
+ggplot(data = mpg) + geom_point(mapping = aes(x = displ, y = hwy))
+
+##### Diagnósticos de RStudio
+
+Como se sabe que R es tan moléstamente quisquilloso, RStudio tiene integrado un detector de errores de sintaxis. 
+
+Un error tremendamente común es que siempre que se abran paréntesis, se deben cerrar (). Por ejemplo a la hora de usar alguna función. Si RStudio detecta que en una línea hay paréntesis sin pareja la marcará con una cruz roja.
+
+```{r, out.width = "700px",echo=FALSE}
+knitr::include_graphics("E:/repositories/intro-r/imagenes/2_scripts/5_unmatched_bracket.png")
+```
+
+Por supuesto existen muchísimos posibles errores en R. Si se comete alguno RStudio tratará de informarte sobre la naturaleza del error, basta con colocar el puntero del mouse sobre la cruz roja para ver esta nota.
+
+![](E:/repositories/intro-r/imagenes/manicule.jpg) Tarea. Desarrolla un script que sirva para llevar a cabo un pequeño análisis exploratorio de los datos Iris de Edgar Anderson.
+
+Esta tabla de datos contiene la medida en centímetros del largo y ancho de los sépalos y los pétalos de 50 flores de cada una de las 3 especies de *Iris*: *Iris setosa*, *Iris versicolor* e *Iris virginica*.
+
+Proponer una gráfica que permita distinguir lo más posible las diferencias entre las 3 especies.
+
+```{r, out.width = "500px",echo=FALSE}
+knitr::include_graphics("E:/repositories/intro-r/imagenes/2_scripts/6_iris.png")
+```
+
+Estos datos están por default en R.  
+
+```{r,echo=FALSE}
+library(tidyverse)
+glimpse(iris)
+```
+
+

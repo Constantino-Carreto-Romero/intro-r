@@ -238,8 +238,9 @@ diamonds_procesado <- diamonds %>%
   group_by(cut, color) %>%
   # Luego calculo los resúmenes por grupo
   summarise(minimo_x = min(x), maximo_y = max(y)) %>%
-  # Finalmente organizo por color
+  # Finalmente ordeno por color
   arrange(desc(color))
+diamonds_procesado
 View(diamonds_procesado)
 ```
 

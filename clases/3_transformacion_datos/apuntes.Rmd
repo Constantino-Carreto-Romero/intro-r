@@ -194,60 +194,25 @@ Algunos resúmenes útiles con _summarise_ son:
 * El máximo de un campo x: __max(x)__
 * El número de registros: __n()__
 * La suma de un campo x: __sum(x)__
-* La desviación estándar de un campo x: d(x).
+* La desviación estándar de un campo x: __sd(x)__.
 
-![](../../imagenes/manicule2.jpg) Crea un data frame nuevo a partir de diamonds
-que contenga el número de registros para cada combinación de valores en las variables
-"cut" y "color".
+![](../../imagenes/manicule.jpg) __Tarea:__ Crea un data frame nuevo a partir de
+diamonds que contenga el número de registros para cada combinación de valores en
+las variables "cut" y "color".
 
-![](../../imagenes/manicule2.jpg) Explica las diferencias que notas entre los data
-frames obtenidos de:
+![](../../imagenes/manicule.jpg) __Tarea:__ Explica las diferencias que notas
+entre los data frames obtenidos de:
 ```{r, eval=FALSE}
 diamonds_agrupado <- group_by(diamonds, cut)
 resultado_1 <- summarise(diamonds_agrupado, promedio_depth = mean(depth))
 resultado_2 <- mutate(diamonds_agrupado, promedio_depth = mean(depth))
 ```
 
-![](../../imagenes/manicule2.jpg) Partiendo del data frame diamonds, crea un
-data frame nuevo con las siguientes características:
+![](../../imagenes/manicule.jpg) __Tarea:__ Partiendo del data frame diamonds,
+crea un data frame nuevo con las siguientes características:
 
 1. Contenga la variable dollars_per_carat = price / carat
 
 2. Contenga sólo aquellos registros que cumplen dollars_per_carat < 4000
 
 3. Esté ordenado en orden descendente por la variable dollars_per_carat
-
-### El operador pipeline %>%
-
-El ejemplo anterior nos introduce a lo tedioso que es aplicar varias funciones
-para transformar datos una tras otra sin ayuda. Aquí es cuando el operador
-pipeline entra en acción:
-
-Nos permite encadenar operaciones de manera sencilla, comenzando por el data frame
-original (diamonds), luego aplicar una transformación, al resultado aplicar otra
-y así sucesivamente.
-
-Por ejemplo:
-
-```{r}
-# Calcular el mínimo de x, y el máximo de y por combinación de cut y color
-# y al resultado ordenarlo por color de manera descendente.
-diamonds_procesado <- diamonds %>%
-  # Primero agrupo por combinación de cut y color, ya que lo necesito para calcular
-  # los resúmenes por grupo
-  group_by(cut, color) %>%
-  # Luego calculo los resúmenes por grupo
-  summarise(minimo_x = min(x), maximo_y = max(y)) %>%
-  # Finalmente ordeno por color
-  arrange(desc(color))
-diamonds_procesado
-View(diamonds_procesado)
-```
-
-El pipeline __%>%__ se puede leer intuitivamente como "después"
-
-![](../../imagenes/manicule.jpg) Tarea: transforma el código de todos los ejemplos
-de la sección 5 para incorporar el uso del pipeline.
-
-
-

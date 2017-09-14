@@ -1,0 +1,77 @@
+---
+title: "Anexo: lectura de bases de datos con dplyr"
+author: "Fernando Pardo"
+output:
+  html_document: default
+  html_notebook:
+    theme: spacelab
+---
+
+## Introducción
+
+Este es un pequeño anexo donde les enseño las funcionalidades básicas para conectarse 
+a __bases de datos relacionales usando R.
+
+## ¿Qué es una base de datos?
+Una base de datos es una colección de datos organizada de tal manera que su búsqueda y obtención sean eficientes.
+
+Las bases de datos se representan por medio del siguiente ícono:
+
+<center>
+<div style="width:100px; height=100px">
+![](datos/bd.png)
+</div>
+</center>
+
+## ¿Qué es una base de datos relacional?
+
+Es una base de datos basada en tablas, cuyos registros se pueden ligar mediante campos
+en común (joins).
+
+## ¿Cómo me conecto a una base de datos relacional usando R?
+
+1. Investigar la "marca" de la base de datos (PostgreSQL, SQLite; MySQL, etc...).
+Esto es en realidad el manejador de bases de datos.
+2. Solicitar las __credenciales__ para conectarnos a la base (servidor, puerto,
+nombre de la base, usuario y contraseña). En el caso de las bases de datos SQLite
+que son un archivo (tipo Excel), sólo se requiere el path hacia el archivo para
+poderlo leer
+3.Conectarnos a la base de datos usando R y trabajar con ella como veremos a continuación.
+
+Ejemplo:
+
+1. Nuestra base de datos ejemplo es una SQLite.
+2. Al ser una SQLite, sólo necesitamos la ruta al archivo (como si fuera un csv).
+Recordar que para establecer la ruta de búsqueda a la carpeta en la que se encuentra
+este archivo se usa desde RStudio __Session -Set Working Directory > To Source File Location.
+3. Conexión a la base de datos usando R
+
+```{r, warning=FALSE, message=FALSE}
+library("tidyverse")
+
+# Conectándonos a la base de datos sqlite:
+bd_pokemon <- src_sqlite("datos/base_pokemon.sqlite")
+# También hay "src_postgres" y "src_mysql"
+
+# Enlistando las tablas que tiene mi base de datos:
+src_tbls(bd_pokemon)
+
+# Extrayendo tablas con las funciones tbl() y collect()
+ataque <- tbl(bd_pokemon, "ataque") %>%
+  collect()
+ataque
+defensa <- tbl(bd_pokemon, "defensa") %>%
+  collect()
+defensa
+
+# También puedo hacer operaciones y pedirle que me colecte los datos al final:
+
+ataque_defensa <- tbl(bd_pokemon, "ataque") %>%
+  inner_join(tbl(bd_pokemon, "defensa"), by = c("no", "name")) %>%
+  collect()
+ataque_defensa
+```
+
+Para terminar, cabe destacar que R se puede conectar a casi cualquier base de datos,
+sólo hay que encontrar los paquetes adecuados (en dplyr sólo vienen funciones para
+conectarse a bases SQLite, MySQL o PostgreSQL).

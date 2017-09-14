@@ -1,0 +1,88 @@
+---
+title: "Recordatorio primera parte clase 4"
+author: "Fernando Pardo"
+output:
+  html_document: default
+  html_notebook:
+    theme: spacelab
+---
+
+## ¿Qué aprendimos las clases pasadas?
+
+* Utilizamos R para saber si comparaciones entre dos cantidades son ciertas o no
+  (5 > 6 #FALSE, 6 == 6 #TRUE)
+* Aprendimos el uso de los operadores y (&), o (|) y no (!):
+  (5 > 6) | (3 < 4) #TRUE
+* Aprendimos las funciones básicas para manipular __tablas de datos__ (paquete
+  __dplyr__ contenido en el tidyverse):
+  
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library("tidyverse")
+library("knitr")
+
+df_funciones_dplyr <- data_frame(
+    Funcionalidad = c(
+      'Seleccionar campos',
+      'Seleccionar registros de acuerdo a un criterio',
+      'Ordenar registros de acuerdo a uno o más campos',
+      'Crear nuevas variables',
+      'Preparar un data frame para calcular resúmenes por grupo',
+      'Calcular resúmenes por grupo'
+      ),
+    Función = c(
+      'select(diamonds, carat, cut)',
+      'filter(diamonds, cut == "Ideal" | x > 4)',
+      'arrange(diamonds, carat, depth)',
+      'mutate(diamonds, dollars_per_carat = price / carat)',
+      'diamonds_agrupado <- group_by(diamonds, cut)',
+      'summarise(diamonds_agrupado, promedio_depth = mean(depth))'
+    ),
+    Interpretación = c(
+      'Del data frame diamonds __seleccióname los campos__ carat y cut',
+      'Del data frame diamonds __seleccióname los registros (filter)__ que cumplen "cut == "Ideal" o (|) "x > 4"',
+      'Del data frame diamonds __ordéname los registros__ primero por carat y luego, los que tengan valores iguales, por depth',
+      'Usando el data frame diamonds __créame la nueva columna__ dollars_per_carat definida como price / carat',
+      'Usando el data frame diamonds, __prepárame los datos__ para calcular resúmenes por valor de la columna cut, y __asigna__ el resultado a la variable diamonds_agrupado',
+      'Usando diamonds agrupado, __calcúlame el resumen__ llamado promedio depth definido como la media de depth'
+    )
+  )
+  kable(df_funciones_dplyr)
+```
+
+* Utilizamos el operador __pipeline__ para simplificar la aplicación de funciones
+de transformación de datos, una tras otra:
+    + Toma el df diamonds, __luego__
+    + créame la variable "dollars_per_carat", __luego__
+    + seleccióname los registros que cumplen "dollars_per_carat < 4000", __luego__
+    + ordéname los registros en orden descendente por "dollars per carat."
+    
+```{r}
+diamonds %>% 
+  mutate(dollars_per_carat = price / carat) %>%
+  filter(dollars_per_carat < 4000) %>%
+  arrange(desc(dollars_per_carat))
+```
+
+* Aprendimos algunas funcionalidades avanzadas de transformación y manejo de datos en R:
+    + Usamos __joins__ para pegar registros de dos tablas distintas por un campo en común.
+    + Usamos __gather__ para transformar columnas en renglones (datos largos).
+    + Usamos __spread__ para transformar reng,lones en columnas (datos anchos).
+* Pilón: Aprendimos a crear nuestros propios data frames en R (con la función de
+  __dplyr__: "data_frame")
+  
+```{r}
+tipos_caracter <- data_frame(
+  id = c(1, 2, 3),
+  tipo = c("letra", "número", "caracter especial")
+)
+tipos_caracter
+
+caracteres <- data_frame(
+  caracter = c("a", "2", "3", "1", "z", "5", "m", "7", "s", "x"),
+  tipo_caracter_id = c(1, 2, 2, 2, 1, 2, 1, 2, 1, 1)
+)
+caracteres
+
+# Haciendo el join de las tablas anteriores
+inner_join(caracteres, tipos_caracter, by = c("tipo_caracter_id" = "id"))
+```

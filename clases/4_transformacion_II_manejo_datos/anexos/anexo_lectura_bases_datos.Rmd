@@ -19,7 +19,7 @@ Las bases de datos se representan por medio del siguiente ícono:
 
 <center>
 <div style="width:100px; height=100px">
-![](datos/bd.png)
+![](../datos/bd.png)
 </div>
 </center>
 
@@ -50,7 +50,7 @@ este archivo se usa desde RStudio __Session -Set Working Directory > To Source F
 library("tidyverse")
 
 # Conectándonos a la base de datos sqlite:
-bd_pokemon <- src_sqlite("datos/base_pokemon.sqlite")
+bd_pokemon <- src_sqlite("../datos/base_pokemon.sqlite")
 # También hay "src_postgres" y "src_mysql"
 
 # Enlistando las tablas que tiene mi base de datos:

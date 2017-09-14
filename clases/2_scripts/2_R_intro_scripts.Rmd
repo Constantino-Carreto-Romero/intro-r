@@ -1,5 +1,5 @@
 ---
-title: "Scripts y una introducción a lectura de datos en R"
+title: "Lectura y escritura de datos e introducción a funciones en R"
 author: "Julián Equihua"
 output:
   html_document: default
@@ -33,7 +33,7 @@ Como se mencionó la clase pasada, Rstudio es un ambiente de desarrollo integrad
 
 
 ```{r, out.width = "700px",echo=FALSE}
-knitr::include_graphics("E:/repositories/intro-r/imagenes/2_scripts/1_rstudio.png")
+knitr::include_graphics("D:/repositories/intro-r/imagenes/2_scripts/1_rstudio.png")
 ```
 
 ##### R como una calculadora
@@ -104,7 +104,7 @@ seq(from=1,to=100)
 Una observación útil es que el autocompletado de RStudio ¡sirve también para funciones! Intenta escribir "se" en la consola y luego oprimir la tecla Tab. Deberá aparecer un recuadro con un listado de opciones. 
 
 ```{r, out.width = "400px",echo=FALSE}
-knitr::include_graphics("E:/repositories/intro-r/imagenes/2_scripts/2_function_tab.png")
+knitr::include_graphics("D:/repositories/intro-r/imagenes/2_scripts/2_function_tab.png")
 ```
 
 Escribir una letra más (e.g. "q") reduce la lista de opciones y la función seq deberá ya ser visible en ellas. Luego basta con oprimir la tecla Enter para elegir la función seq.
@@ -119,10 +119,10 @@ secuencia_del_1_al_100 <- seq(from=1,to=100)
 En la sección superior derecha de nuestro ambiente de RStudio ya deben existir dos objetos cargados en el espacio de trabajo: "esta_operacion_es_sumamente_larga" y "secuencia_del_1_al_100". Estos ya están cargados en la memoria RAM de la computadora y R puede acceder a ellos cuando se les solicite utilizando su nombre.
 
 ```{r, out.width = "700px",echo=FALSE}
-knitr::include_graphics("E:/repositories/intro-r/imagenes/2_scripts/3_espacio_trabajo.png")
+knitr::include_graphics("D:/repositories/intro-r/imagenes/2_scripts/3_espacio_trabajo.png")
 ```
 
-![](E:/repositories/intro-r/imagenes/manicule2.jpg) ¿Por qué no funciona el siguiente código? Modifícalo hasta que cada instrucción funcione.
+![](D:/repositories/intro-r/imagenes/manicule2.jpg) ¿Por qué no funciona el siguiente código? Modifícalo hasta que cada instrucción funcione.
 
 library(tidyverse)
 
@@ -143,12 +143,12 @@ Hasta ahora hemos trabajado todo diréctamente en la consola pero generar un scr
 En un script el símbolo # le indica a R que esa línea es un comentario. Los comentarios no se ejecutan y sirven para tener notas para nosotros mismos sobre el código que estamos desarrollando. Cuando una línea de texto es un comentario, será de color verde.
 
 ```{r, out.width = "700px",echo=FALSE}
-knitr::include_graphics("E:/repositories/intro-r/imagenes/2_scripts/4_primer_script.png")
+knitr::include_graphics("D:/repositories/intro-r/imagenes/2_scripts/4_primer_script.png")
 ```
 
 Para ejecutar el código que se encuentra en un script se pueden utilizar las teclas: Ctrl/Cmd (mac) + Enter o el botrón "Run" que se encuentra en la esquina superior derecha de la ventana de scripts. En un script puedes correr una línea en particular (primero la eliges con el mouse, botón izquierdo). También puedes correr una selección de tu script, para esto sólo debes elegir una sección de tu código dejando apretado el botón derecho del mouse o con la tecla shift y las flechas del teclado; análogo a como se hace en word.
 
-![](E:/repositories/intro-r/imagenes/manicule2.jpg) Hacer un script que te permita agregar colores por "manufacturer" a la siguiente gráfica.
+![](D:/repositories/intro-r/imagenes/manicule2.jpg) Hacer un script que te permita agregar colores por "manufacturer" a la siguiente gráfica.
 
 library(tidyverse)
 
@@ -161,19 +161,19 @@ Como se sabe que R es tan moléstamente quisquilloso, RStudio tiene integrado un
 Un error tremendamente común es que siempre que se abran paréntesis, se deben cerrar (). Por ejemplo a la hora de usar alguna función. Si RStudio detecta que en una línea hay paréntesis sin pareja la marcará con una cruz roja.
 
 ```{r, out.width = "700px",echo=FALSE}
-knitr::include_graphics("E:/repositories/intro-r/imagenes/2_scripts/5_unmatched_bracket.png")
+knitr::include_graphics("D:/repositories/intro-r/imagenes/2_scripts/5_unmatched_bracket.png")
 ```
 
 Por supuesto existen muchísimos posibles errores en R. Si se comete alguno RStudio tratará de informarte sobre la naturaleza del error, basta con colocar el puntero del mouse sobre la cruz roja para ver esta nota.
 
-![](E:/repositories/intro-r/imagenes/manicule.jpg) Tarea. Desarrolla un script que sirva para llevar a cabo un pequeño análisis exploratorio de los datos Iris de Edgar Anderson.
+![](D:/repositories/intro-r/imagenes/manicule.jpg) Tarea. Desarrolla un script que sirva para llevar a cabo un pequeño análisis exploratorio de los datos Iris de Edgar Anderson.
 
 Esta tabla de datos contiene la medida en centímetros del largo y ancho de los sépalos y los pétalos de 50 flores de cada una de las 3 especies de *Iris*: *Iris setosa*, *Iris versicolor* e *Iris virginica*.
 
 Proponer una gráfica que permita distinguir lo más posible las diferencias entre las 3 especies.
 
 ```{r, out.width = "500px",echo=FALSE}
-knitr::include_graphics("E:/repositories/intro-r/imagenes/2_scripts/6_iris.png")
+knitr::include_graphics("D:/repositories/intro-r/imagenes/2_scripts/6_iris.png")
 ```
 
 Estos datos están por default en R.  

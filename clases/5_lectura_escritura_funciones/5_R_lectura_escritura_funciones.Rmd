@@ -1,0 +1,330 @@
+---
+title: "Lectura y escritura de datos e introducción a la programación de funciones en R"
+author: "Julián Equihua"
+output:
+  html_document: default
+  html_notebook:
+    theme: spacelab
+---
+
+### ¿Qué aprendimos la clase pasada?
+
+
+* Utilizar el operador __pipeline__ para simplificar la aplicación de funciones
+de transformación de datos, una tras otra (recordar la tarea, ejercicio 3).
+* Miscelánea de funcionalidades avanzadas de transformación de datos:
+    + __joins__ (uniones de dos o más tablas).
+    + El paquete __tidyr__ para transformar la __estructura__ de los datos en una tabla.
+* Un poco acerca de tipos de datos y datos faltantes (celdas vacías).
+* Leer datos de CSV en R.
+
+<!--
+```{r, echo=FALSE}
+htmltools::img(src = knitr::image_uri(file.path(R.home("doc"), "html", "logo.jpg")), 
+  alt = 'logo', 
+               style = 'position:absolute; top:0; left:0; padding:30px;')
+```
+-->
+
+En esta clase aprenderemos a:
+
+* Leer y escribir diversos objetos de R a formatos populares
+* Cómo escribir funciones propias que lleven a cabo procesos complejos
+
+### Lectura de datos
+#### Detallando la interacción entre R y nuestro disco duro 
+
+En la clase pasada vimos que se puede cargar un archivo csv usando la función read_csv pertenecniente al paquete readr. La mecánica de lectura en R es sencilla y, sin importar el tipo de archivo que se quiera cargar a nuestro espacio de trabajo, siempre tiene la misma forma: se utiliza una función preparada para cargar un cierto tipo de archivo y luego se le debe indicar a R dónde está el archivo (de este tipo) que se desea cargar.
+
+R tiene tiene una única manera de saber dónde buscar un archivo. Debe recibir una dirección que le indique dónde buscar físicamente el archivo de interés. 
+
+```{r, out.width = "700px",echo=FALSE}
+knitr::include_graphics("D:/repositories/intro-r/imagenes/5_lectura/1_ojo.png")
+```
+
+R puede "ver" lo que sea que le muestres, esto es, puedes decirle exáctamente dónde debe buscar un archivo, por ejemplo indicando con una cadena de texto una ruta completa en nuestro disco duro: "D:\repositories\intro-r\". Estas rutas se pueden escribir manualmente, o se pueden copiar del explorador de archivos de nuestro sistema operativo y luego pegarla en R. 
+
+```{r, out.width = "700px",echo=FALSE}
+knitr::include_graphics("D:/repositories/intro-r/imagenes/5_lectura/2_ruta.png")
+```
+
+Es muy importante notar que en Windows, la convención es usar diagonales invertidas "\" para separar los niveles de nuestra ruta. R no va a entender que algo es una ruta si está construída con estos símbolos. Si se copia y pega una ruta desde nuestro explorador de archivos en Windows, debemos cambiar las diagonales invertidas por diagonales: "D:/repositories/intro-r/".
+
+Otra posibilidad, también ya mencionada, es indicarle a R que "vea" una carpeta de trabajo. En este momento R está "viendo" la siguiente carpeta:
+
+```{r}
+getwd()
+```
+
+Estoy indica que R no necesita una ruta completa para leer cualquier cosa incluída en la carpeta anterior. Únicamente el archivo. Para cambiar la carpeta de trabajo se utiliza la funcón setwd() que como argumento escencial recibe una ruta. Por ejemplo:
+
+```{r}
+setwd("D:/repositories/")
+
+getwd()
+```
+
+Otra cosa que vale la pena mencionar es que RStudio incluye un explorador de archivos, ahí se puede navegar en las carpetas de nuestra computadora y con las opciones disponibles en el ícono de engrane se puede también asignar la carpeta de trabajo.
+
+```{r, out.width = "700px",echo=FALSE}
+knitr::include_graphics("D:/repositories/intro-r/imagenes/5_lectura/3_setwd.png")
+```
+
+A veces resulta útil construir listas de los archivos que se encuentran en una ruta dada. R tiene funciones para llevar esto a cabo de manera automatizada. La función list.files() construye una lista de los archivos que se encuentran en una ruta argumento.
+
+```{r, out.width = "700px",echo=FALSE}
+list.files("D:/repositories/intro-r")
+```
+
+Hacer 
+
+```{r, out.width = "700px",echo=FALSE}
+?list.files
+```
+
+Esta función tiene varios argumentos muy útiles que te permiten controlar cómo se llevará a cabo la búsqueda de archivos. Por ejemplo le puedes pedir a la función que exhaustivamente recorra todas las carpetas que se encuentran en la ruta argumento.
+
+```{r, out.width = "700px",echo=FALSE}
+list.files("D:/repositories/intro-r",recursive=TRUE)
+```
+
+O puedes pedir que sólo busque archivos de un cierto tipo (que terminen con una extensión dada)
+
+```{r, out.width = "700px",echo=FALSE}
+list.files("D:/repositories/intro-r",pattern="\\.Rmd$",recursive=TRUE)
+```
+
+Lo que se incluye en el argumento pattern="\\.Rmd$" es una expresión regular y sirve para buscar patrones en cadenas de texto. Este tema escapa la intención de este curso pero para una introducción a él se puede consultar: http://stat545.com/block022_regular-expression.html.
+
+![](D:/repositories/intro-r/imagenes/manicule2.jpg) Como sucede con el resultado de cualquier función, la salida de list.files() se puede asignar un objeto. Como ejercicio: generar una lista de archivos de cierto tipo a partir de una ruta en tu computadora y asignarla a un objeto en R. Probar qué sucede si se utilizan índices sobre esta lista, e.g. lista_archivos[1] y lista_archivos[1:3].
+
+
+#### Lectura de diferentes tipos de archivos en R
+
+En la clase pasada omitimos que existen numerosas variaciones de archivos de texto y csvs. Se utilizó la función read_csv() que lee archivos csv delimitados por comas:
+
+```{r, out.width = "700px",echo=FALSE}
+knitr::include_graphics("D:/repositories/intro-r/imagenes/5_lectura/4_comas.png")
+```
+
+La mayoría de las funciones de readr tiene como objetivo convertir este tipo de archivos en data frames, aunque archivos de este tipo delimitados por comas es lo más común, nos podemos encontrar con archivos delimitados por otros símbolos, de aquí que existan las siguiente funciones:
+
+* read_csv2() que lee archivos separados por punto y comas ";"
+* read_tsv() lee archivos separados por Tabs
+* read_delim() lee archivos separados por cualquier símbolo (tú lo determinas con un argumento)
+* read_fwf() lee archivos de anchos fijos, se pueden especificar los anchos con fwf_widths() o su posición en el espacio (fila de datos) con fwf_positions().
+* read_table() lee un caso muy particular y popular de lo anterior que son archivos con datos separados por un único espacio. 
+
+Como ya se mencionó, todas estas funciones tienen una sintaxtis similar. Lo más importante es alimentarles bien la ruta del archivo que se desea leer.
+
+Aunque este tipos de archivos son extremadamente populares en el mundo de los archivos de datos, existen numerosas otras presentaciones. Por ejemplo, es muy común el uso de Microsoft Excel para análisis cuantitativo. R está bien preparado para leer y escribir archivos excel.
+
+Bajaremos datos de Incidencia de Víctimas de homicidio, secuestro y extorsión de datos.gob.mx:
+
+https://datos.gob.mx/busca/dataset/victimas-de-homicidio-secuestro-y-extorsion-excel
+
+Para leer estos datos se utilizaremos el paquete readxl (no se les olvide instalarlo)
+
+```{r}
+
+# cargar el paquete
+library("readxl")
+
+# ¿dónde está el archivo? en mi caso:
+mi_ruta <- "C:/Users/julco/Downloads/Datos_abiertos_Victimas_Fuero_comun.xls"
+
+# leer este archivo 
+datos <- read_excel(mi_ruta,sheet=1)
+```
+
+Estos datos contienen conteos de delitos y sus modalidades por mes, para los estados de la república en los últimos cuatro años.
+
+Estos se leen como un data.frame y todo lo aprendido sobre data.frames hasta ahora aplica al objeto datos. Podemos por ejemplo generar una nueva variable "total" haciendo con la función rowSums(). Esta suma por filas, las cantidades de las columnas elegidas. Antes de poder sumar debemos observar que las columnas donde se encuentran los conteos son de la 6 a la 17.
+
+```{r}
+
+# cargar el tidyverse
+library("tidyverse")
+
+datos <- mutate(datos, total = rowSums(datos[,6:17],na.rm=TRUE))
+
+```
+
+Ya que agregamos esta variable nueva podemos guardar esto en un archivo nuevo, por ejemplo un csv. A diferencia de leer un archivo, a la hora de escribir hay dos argumentos esenciales: qué objeto se va a escribir (en este caso el objeto "datos") y a dónde (que de nuevos es una ruta en nuestra computadora).
+
+```{r}
+
+ruta_escritura = "C:/Users/julco/Downloads/Datos_abiertos_Victimas_Fuero_comun.csv"
+
+write_csv(datos, path=ruta_escritura)
+
+```
+
+En general una búsqueda en google informa sobre cómo leer cualquier tipo de archivo en R.
+
+```{r, out.width = "800px",echo=FALSE}
+knitr::include_graphics("D:/repositories/intro-r/imagenes/5_lectura/5_read.png")
+```
+
+Lo mismo para guardar archivos en nuestro formato de elección, por ejemplo imágenes. Para guardar los resultados de nuestros ejercicios de visualización de dato existen numerosas funciones. Como ejemplo, retomemos los datos de automóviles que trabajamos en la primera clase. Notar que nuevamente lo que es importante es indicarle a R una ruta apropiada (con el nombre del archivo y su extensión) para que sepa a dónde mandar nuestra gráfica.
+
+```{r}
+
+# un ejemplo de gráfica sencilla
+ggplot(mtcars, aes(mpg, wt)) + geom_point()
+
+# guardarla en disco como pdf
+ggsave("C:/Users/julco/Downloads/mtcars.pdf", width = 20, height = 20, units = "cm")
+
+```
+
+![](D:/repositories/intro-r/imagenes/manicule2.jpg) Ejercicio: generar una gráfica a partir de lo visto con anterioridad de visualización y manipulación de datos utilizando los datos de homicidios y secuestros y guardarla en disco como una imagen png. 
+
+### Escribiendo funciones en R
+
+Las funciones permiten la automatización de tareas. La escritura de funciones tiene tres grandes ventajas:
+
+* Puedes nombrar una función de una manera tal que nunca olvides qué hace, esto además hace a tu código más legible
+* Cuando cambien los requerimientos de los trabajos día a día, deberás de modificar menos código
+* Se reduce la probabilidad de cometer errores llevando a cabo procesos manuales como copiar/pegar datos e instrucciones.
+
+Aprender a escrbir buenas funciones es un proceso que nunca termina. Siempre se encontrarán maneras novedosas de mejorar estilos a la hora de escribir funciones. Esta sección no tiene como objetivo profundizar en la escritura de funciones, si no empezar a escribir funciones útiles lo más pronto posible. 
+
+#### ¿Cuándo me conviene escribir funciones?
+
+Como regla de dedo, si notas que para llevar a cabo una cierta tarea en R estás copiando y pegando un bloque de código más de dos veces, es hora de escribir una función para ello. Para ejemplificar esto, primero generemos una tabla de datos y llevemos a cabo un mismo proceso sobre cada una de sus columnas: a,b,c y d.
+
+```{r}
+
+df <- tibble::tibble(
+  a = rnorm(10),
+  b = rnorm(10),
+  c = rnorm(10),
+  d = rnorm(10)
+)
+
+df$a <- (df$a - min(df$a, na.rm = TRUE)) / 
+  (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$b <- (df$b - min(df$b, na.rm = TRUE)) / 
+  (max(df$b, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$c <- (df$c - min(df$c, na.rm = TRUE)) / 
+  (max(df$c, na.rm = TRUE) - min(df$c, na.rm = TRUE))
+df$d <- (df$d - min(df$d, na.rm = TRUE)) / 
+  (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+
+```
+
+¿Alguien puede decir qué proceso se llevó a cabo sobre cada una de las columnas? Más aún, existe un error en uno de los pasos de este proceso ¿alguien puede identificar cuál es?
+
+Escribir una función que lleve a cabo este proceso para después aplicarlo a cada una de estas cuatro columnas es la mejor manera de evitar errores como el anterior.
+
+Lo primero que se necesita para escribir una función es pensar en qué queremos que haga, seguido de pensar en cuántos argumentos requiere.
+
+El proceso anterior actúa sobre una columna de nuestra tabla de datos y no requiere de nada más que una de estas columnas para llevarse a cabo. 
+
+Pasos para crear una función:
+
+* Elegir un nombre apropiado
+* Pensar en qué hace y cuántos argumentos necesita para ejecutarse
+* Traducir lo que queremos que haga a código de R dentro de un bloque asociado a una función y a los argumentos anteriores
+
+Nosotros queremos escribir una función que escale un vector de datos (por ejemplo la columna de un data frame). Esto se logra restándole el mínimo y dividiendo entre el rango del mismo a cada una de sus entradas. Llamemos a la función "estandarizar":
+
+```{r}
+
+# nombre ------------- argumentos
+estandarizar    <- function(vector)
+
+# aquí inicia el cuerpo de la función   
+{
+  
+  # operamos sobre el vector
+  vector <- (vector - min(vector, na.rm = TRUE)) / 
+  (max(vector, na.rm = TRUE) - min(vector, na.rm = TRUE))
+  
+  # regresamos el resultado (esto es lo que se asigna después de aplicar esta función)
+  return(vector)
+  
+}
+# aquí termina el cuerpo de la función
+
+
+# probemos nuestra función
+a_estandarizada <- estandarizar(df$a)
+a_estandarizada
+
+
+```
+
+Dentro de una función pueden colocarse cualquiera de los elementos que se han visto en las clases pasadas. Por ejemplo se pueden incluir expresiones condicionales e incluso se pueden incluir otras funciones.
+
+Por poner un ejemplo, escribamos una función que use la función anterior, pero que con una expresión condicional cheque si el vector de entrada ya está escalado (entre 0 y 1).
+
+Las expresiones condicionales tiene la forma 
+
+si { expresión } entonces
+
+si no entonces
+
+Esto es, checa si "expresión" es VERDADERA y si lo es, ejecuta el correspondiente bloque de código. Si expresión es falsa, ejecuta otro bloque de código o nada.
+
+```{r}
+
+df <- tibble::tibble(
+  a = rnorm(10),
+  b = rnorm(10),
+  c = rnorm(10),
+  d = rnorm(10)
+)
+
+# nombre ------------- argumentos
+estandarizar_check    <- function(vector)
+
+# aquí inicia el cuerpo de la función   
+{
+  
+  # expresión condicional: ¿ya está entre 0 y 1 el vector de entrada?
+  
+  if (0<=min(vector) & max(vector)<=1)
+  {
+    # avísame si ya está estandarizado
+    print("Ya está estandarizado, no hice nada")
+  }
+  else
+  {
+    # avísame si no lo está
+    print("No está estandrizado, lo estandarizo")
+    
+    # operamos sobre el vector
+    vector <- (vector - min(vector, na.rm = TRUE)) / 
+    (max(vector, na.rm = TRUE) - min(vector, na.rm = TRUE))
+  
+  }
+  
+  # regresamos el resultado (esto es lo que se asigna después de aplicar esta función)
+  return(vector)
+}
+# aquí termina el cuerpo de la función
+
+
+# probemos nuestra función
+a_escalada <- estandarizar_check(df$a)
+
+a_escalada <- estandarizar_check(a_escalada)
+
+
+```
+
+Ahora que ya tengo una función que hace lo que quiero, puedo ejecutar de manera más sucinta y con menos posibilidad de errores lo que quería en un principio, que era estandarizar cada columna de nuestro data frame (df).
+
+```{r}
+
+
+df$a <- estandarizar_check(df$a)
+df$b <- estandarizar_check(df$b)
+df$c <- estandarizar_check(df$c)
+df$d <- estandarizar_check(df$d)
+
+```
+
+![](D:/repositories/intro-r/imagenes/manicule.jpg) Tarea: desarrollar un script que incluya una función que lleve a cabo un proceso que generalmente llevarías a cabo en excel sobre una tabla de datos propia. 

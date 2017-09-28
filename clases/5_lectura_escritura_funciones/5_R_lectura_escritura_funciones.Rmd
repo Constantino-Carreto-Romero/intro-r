@@ -42,13 +42,13 @@ R tiene tiene una única manera de saber dónde buscar un archivo. Debe recibir 
 knitr::include_graphics("D:/repositories/intro-r/imagenes/5_lectura/1_ojo.png")
 ```
 
-R puede "ver" lo que sea que le muestres, esto es, puedes decirle exáctamente dónde debe buscar un archivo, por ejemplo indicando con una cadena de texto una ruta completa en nuestro disco duro: "D:\repositories\intro-r\". Estas rutas se pueden escribir manualmente, o se pueden copiar del explorador de archivos de nuestro sistema operativo y luego pegarla en R. 
+R puede "ver" lo que sea que le muestres, esto es, puedes decirle exáctamente dónde debe buscar un archivo, por ejemplo indicando con una cadena de texto una ruta completa en nuestro sistema de archivos (disco duro): "D:\\repositories\\intro-r\\". Estas rutas se pueden escribir manualmente, o se pueden copiar del explorador de archivos de nuestro sistema operativo y luego pegarla en R. 
 
 ```{r, out.width = "700px",echo=FALSE}
 knitr::include_graphics("D:/repositories/intro-r/imagenes/5_lectura/2_ruta.png")
 ```
 
-Es muy importante notar que en Windows, la convención es usar diagonales invertidas "\" para separar los niveles de nuestra ruta. R no va a entender que algo es una ruta si está construída con estos símbolos. Si se copia y pega una ruta desde nuestro explorador de archivos en Windows, debemos cambiar las diagonales invertidas por diagonales: "D:/repositories/intro-r/".
+Es muy importante notar que en Windows, la convención es usar diagonales invertidas "\\" para separar los niveles de nuestra ruta. R no va a entender que algo es una ruta si está construída con estos símbolos. Si se copia y pega una ruta desde nuestro explorador de archivos en Windows, debemos cambiar las diagonales invertidas por diagonales: "D:/repositories/intro-r/".
 
 Otra posibilidad, también ya mencionada, es indicarle a R que "vea" una carpeta de trabajo. En este momento R está "viendo" la siguiente carpeta:
 
@@ -150,11 +150,23 @@ datos <- mutate(datos, total = rowSums(datos[,6:17],na.rm=TRUE))
 
 ```
 
-Ya que agregamos esta variable nueva podemos guardar esto en un archivo nuevo, por ejemplo un csv. A diferencia de leer un archivo, a la hora de escribir hay dos argumentos esenciales: qué objeto se va a escribir (en este caso el objeto "datos") y a dónde (que de nuevos es una ruta en nuestra computadora).
+
+Ya que agregamos esta variable nueva, podemos concentrarnos en los Homicidios Dolosos y elegir sólo campos de nuestro interés.
 
 ```{r}
 
-ruta_escritura = "C:/Users/julco/Downloads/Datos_abiertos_Victimas_Fuero_comun.csv"
+datos_homicidios  <- datos %>% 
+                    select(ENTIDAD,AÑO,DELITO,MODALIDAD,total)%>%
+                    filter(MODALIDAD == "DOLOSO")
+
+```
+
+
+podemos guardar esta nueva tabla de datos en un archivo, por ejemplo un csv. A diferencia de leer un archivo, a la hora de escribir hay dos argumentos esenciales: qué objeto se va a escribir (en este caso el objeto "datos") y a dónde (que de nuevos es una ruta en nuestra computadora).
+
+```{r}
+
+ruta_escritura = "C:/Users/julco/Downloads/Datos_abiertos_Homicidios_Dolosos.csv"
 
 write_csv(datos, path=ruta_escritura)
 
@@ -166,21 +178,20 @@ En general una búsqueda en google informa sobre cómo leer cualquier tipo de ar
 knitr::include_graphics("D:/repositories/intro-r/imagenes/5_lectura/5_read.png")
 ```
 
-Lo mismo para guardar archivos en nuestro formato de elección, por ejemplo imágenes. Para guardar los resultados de nuestros ejercicios de visualización de dato existen numerosas funciones. Como ejemplo, retomemos los datos de automóviles que trabajamos en la primera clase. Notar que nuevamente lo que es importante es indicarle a R una ruta apropiada (con el nombre del archivo y su extensión) para que sepa a dónde mandar nuestra gráfica.
+Lo mismo para guardar archivos en nuestro formato de elección, por ejemplo imágenes. Para guardar los resultados de nuestros ejercicios de visualización de datos existen numerosas funciones. Por ejemplo para guardar fácilmente gráficas hechas con ggplot2 existe la función ggsave.
 
-```{r}
+![](D:/repositories/intro-r/imagenes/manicule2.jpg) Ejercicio: Con el siguiente código de muestra generar una gráfica de barras a apiladas de homicidios dolosos por entidad.
 
-# un ejemplo de gráfica sencilla
-ggplot(mtcars, aes(mpg, wt)) + geom_point()
+ggplot(data = datos_homicidios, aes(x = reorder(ENTIDAD,total), y = total, fill = AÑO)) + 
+  geom_bar(stat = "identity") + labs(y="Homicidios dolosos", x="Entidad") + coord_flip()
+  
+Luego utilizar la función ggsave para guardar la gráfica como un archivo PDF.
 
-# guardarla en disco como pdf
-ggsave("C:/Users/julco/Downloads/mtcars.pdf", width = 20, height = 20, units = "cm")
+ggsave("mi_ruta/mi_nombre_archivo.pdf", width = 20, height = 20, units = "cm")   
 
-```
+Notar que nuevamente lo que es importante es indicarle a R una ruta apropiada (con el nombre del archivo y su extensión) para que sepa a dónde mandar nuestra gráfica.
 
-![](D:/repositories/intro-r/imagenes/manicule2.jpg) Ejercicio: generar una gráfica a partir de lo visto con anterioridad de visualización y manipulación de datos utilizando los datos de homicidios y secuestros y guardarla en disco como una imagen png. 
-
-### Escribiendo funciones en R
+### Funciones en R
 
 Las funciones permiten la automatización de tareas. La escritura de funciones tiene tres grandes ventajas:
 
@@ -222,6 +233,8 @@ Lo primero que se necesita para escribir una función es pensar en qué queremos
 
 El proceso anterior actúa sobre una columna de nuestra tabla de datos y no requiere de nada más que una de estas columnas para llevarse a cabo. 
 
+#### Escribiendo funciones en R
+
 Pasos para crear una función:
 
 * Elegir un nombre apropiado
@@ -251,6 +264,7 @@ estandarizar    <- function(vector)
 
 # probemos nuestra función
 a_estandarizada <- estandarizar(df$a)
+
 a_estandarizada
 
 
@@ -308,9 +322,9 @@ estandarizar_check    <- function(vector)
 
 
 # probemos nuestra función
-a_escalada <- estandarizar_check(df$a)
+a_estandarizada <- estandarizar_check(df$a)
 
-a_escalada <- estandarizar_check(a_escalada)
+a_estandarizada <- estandarizar_check(a_estandarizada)
 
 
 ```
@@ -321,10 +335,170 @@ Ahora que ya tengo una función que hace lo que quiero, puedo ejecutar de manera
 
 
 df$a <- estandarizar_check(df$a)
-df$b <- estandarizar_check(df$b)
-df$c <- estandarizar_check(df$c)
-df$d <- estandarizar_check(df$d)
+
 
 ```
 
-![](D:/repositories/intro-r/imagenes/manicule.jpg) Tarea: desarrollar un script que incluya una función que lleve a cabo un proceso que generalmente llevarías a cabo en excel sobre una tabla de datos propia. 
+![](D:/repositories/intro-r/imagenes/manicule2.jpg) Ejercicio: En la sección anterior usamos el siguiente código para obtener sólo los datos de homicidios dolosos.
+
+datos_homicidios  <- datos %>% 
+                    select(ENTIDAD,AÑO,DELITO,MODALIDAD,total)%>%
+                    filter(MODALIDAD == "DOLOSO")
+
+Generar una función que reciba como input una tabla de datos (en este caso natualmente se aplicará sobre la de crímenes) y un número-año y que regrese datos filtrados por año.
+
+### Iteración en R
+
+En la sección anterior se vió cómo evitar duplicar código que se usa de manera recurrente utilizando funciones. Una función abstrae una tarea y permite llevarla a cabo sin escribir código adicional, sólo necesitando ciertos parámetros de entrada.
+
+Otra herramienta útil para evitar escribir más código son los mecanismos de iteración. Estos son útiles cuando se quiere llevar a cabo la misma tarea múltiples veces.
+
+En esta clase aprenderemos sobre dos paradigmas de iteración: la programación imperativa y la programación funcional.
+
+La primera es un paradigma más antiguo y permite introducirse fácilmente al tema pues hace que la iteración sea muy explícita. Como desventaja, las estructuras de este paradigma, llamados bucles (en inglés loops), tienden a ser verbosos. La programación funcional ofrece herramientas para extraer todo el código duplicado para que cada bucle tenga su propia función. Después de un poco de práctica se puede resolver los problemas más comunes en iteración de manera más sencilla, utilizando menos código y por lo mismo cometiendo menos errores. 
+
+#### Programación imperativa
+
+Un bucle está compuesto de una secuencia y un cuerpo que se ejecuta con base en esta secuencia.
+
+Una secuencia:
+
+```{r}
+
+
+1:5
+
+
+```
+
+Un bucle for puede ejecutar el mismo código (el contenido en su cuerpo) variando un iterador. Por ejemplo el siguiente código nos muestra uno por uno los números en la secuencia misma y en cada una de esas iteraciones nos muestra la palabra "gatito". 
+
+```{r}
+
+for (i in 1:5) # para la secuancia del 1 al 10
+{
+  print(i)
+  print("gatito") # ejecutar esto 
+}
+
+```
+
+![](D:/repositories/intro-r/imagenes/manicule2.jpg) Ejercicio: Escribir una función que calcule la media de cada columna de la tabla de datos de coches usada en clases pasadas.
+
+mtcars
+
+Hint: select() se puede aplicar sobre índices que indican la posición de la columna en la tabla de datos, e.g.
+
+primera_columna  <- datos %>% 
+                    select(1)
+
+
+Un ejemplo juntando todo
+
+Usando la función que extrae los datos de homicidios dolosos para un año y un bucle generaremos una gráfica de barras por año.
+
+```{r}
+
+extrae_homicidios_fecha <- function(datos,fecha)
+{
+  datos <- datos %>% 
+  select(ENTIDAD,AÑO,DELITO,MODALIDAD,total)%>%
+  filter(MODALIDAD == "DOLOSO",AÑO==fecha)
+  
+  return(datos)
+}
+
+# bucle
+for (i in 2014:2017)
+{
+
+  homicidios_anio <- extrae_homicidios_fecha(datos,i)
+
+  homicidios_fecha <- paste0("Homicidios dolosos ",toString(i))
+
+  print(ggplot(data = homicidios_anio, aes(x = reorder(ENTIDAD,total), y = total)) + 
+    geom_bar(stat = "identity") + labs(y=homicidios_fecha, x="Entidad") + coord_flip())
+}
+
+
+```
+
+![](D:/repositories/intro-r/imagenes/manicule2.jpg) Ejercicio: Modificar el código anterior para que guarde un PDF para cada gráfica generada en la ruta de su elección.
+
+#### Programación funcional
+
+Ya se introdujo la idea de que se puede utilizar una función dentro de otra función. En esta sección se aprenderá a utilizar el paquete purr, que elimina la necesidad de aprender a generar bucles complejos. La base de R tiene funciones con la misma idea (apply(), lapply(), tapply(), etc) pero purr tiende a ser más consistente y por lo tanto más fácil de aprender a usar.
+
+Si se quiere indagar en las funcones apply se puede consultar esta liga:
+
+https://www.datacamp.com/community/tutorials/r-tutorial-apply-family#gs.bJ=BAKY
+
+El objetivo de las funciones de purr es ayudar a romper las tareas de manipulación de listas en pedazos independientes:
+
+Primero se debe plantear la interrogante ¿Cómo se puede resolver el problema de interés para un único elemento de la lista? Luego purr ayuda a generalizarlo a cada elemento de la lista.
+
+##### La función map
+
+La tarea de barrer un vector, hacer algo a cada elemento y luego guardar los resultados es tan común que el paquete purr provee una familia de funciones para llevar esto a cabo.
+
+Existe una función para cada tipo de salida:
+
+* map() genera una lista.
+* map_lgl() genera un vector de valores lógicos.
+* map_int() genera un vector de valores enteros.
+* map_dbl() genera un vector de valores dobles (números reales).
+* map_chr() genera un vector de valores texto.
+
+Cada una de estas funciones recibe como entrada un vector, aplica una función elegida por el usuario a cada pedazo y regresa un vector de la misma longitud que el original (y con los mismos nombres).
+
+Por ejemplo para calcular la media de cada columna de la tabla de datos de coches basta con hacer
+
+```{r}
+
+
+map_dbl(mtcars, mean)
+
+
+```
+
+
+##### La función walk
+
+Es una alternativa a map cuando se quiere llamar una función más por sus efectos que por sus resultados. Esto es, sirve para llevar a cabo un proceso a lo largo de, por ejemplo, un vector.
+
+Un ejemplo muy simple
+
+```{r}
+
+x <- list(1, "a", 3)
+
+x %>% 
+  walk(print)  # si se fijan hace algo muy parecito a nuestro primer ejemplo de bucle
+
+```
+
+Las funciones map() y walk() iteran sobre múltiples arugmentos en paralelo, map2() y walk2() se especializan en el caso particular de 2 argumentos y pmap() y pwalk() en el caso de un número ilimitado de argumentos en una lista.
+
+La función walk, en general, no es tan útil como las funciones walk2() or pwalk(). Por ejemplo para replicar el ejercicio de separar la tabla de datos de homicidios se puede usar map() seguido de pwalk() para además guardar los plots como pdf.
+
+```{r}
+
+plots <- datos_homicidios %>% 
+         split(.$AÑO) %>% 
+  
+          # nota importante: "." al usar map sirve para algo análogo a "i" en los bucles
+  
+         map(~ggplot(data = ., aes(x = reorder(ENTIDAD,total), y = total)) + 
+            geom_bar(stat = "identity") + labs(y=homicidios_fecha, x="Entidad") + coord_flip())
+
+paths <- stringr::str_c(names(plots), ".pdf")
+
+pwalk(list(paths, plots), ggsave, path = getwd())
+
+getwd()
+
+```
+
+
+
+![](D:/repositories/intro-r/imagenes/manicule.jpg) Tarea: desarrollar un script que incluya una función que lleve a cabo un proceso que generalmente llevarías a cabo usando otra herramienta, por ejemplo excel, sobre una tabla de datos propia. Explicar lo que se llevó a cabo. 
